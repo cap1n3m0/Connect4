@@ -37,6 +37,18 @@ def placePiece(board, color, col):
         board[-1][col] = color
 
 
+def placePiece(board, color, col):
+    if board[0][col] == "r" or board[0][col] == "y":
+        print("This column is full")
+        return board
+    else:
+        counter = 0
+        for i in board:
+            if i[col] == "r" or i[col] == "y":
+                board[counter - 1][col] = color
+                return board
+        board[-1][col] = color
+
 def hasWon(board, color):
     #expected input (board, "r")
     #Rows
@@ -51,10 +63,11 @@ def hasWon(board, color):
                 currentStreak = 0
     
     #Columns
-    for i in list(range(6)):
+    for i in list(range(5)):
         currentStreak = 0
-        for l in list(range(5)):
-            if board[i][l] == color:
+        for l in list(range(6)):
+
+            if board[l][i] == color:
                 currentStreak += 1
             else: 
                 currentStreak = 0
