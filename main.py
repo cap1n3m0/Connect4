@@ -31,6 +31,7 @@ def printboard(board):
 
 
 def placePiece(board, colour, col):
+    col -= 1
     if board[0][col] == "r" or board[0][col] == "y":
         print("This column is full")
         return False
@@ -38,9 +39,11 @@ def placePiece(board, colour, col):
         counter = 0
         for i in board:
             if i[col] == "r" or i[col] == "y":
-                board[counter][col - 1] = colour
+                print(counter)
+                board[counter - 1][col] = colour
                 print("print board")
                 printboard(board)
+                counter += 1
                 return True
         if board[5][col] == "o":
             print("printing board")
