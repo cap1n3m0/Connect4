@@ -5,7 +5,7 @@ class Player:
         self.color = c
         
     
-playerRed = Player()
+playerRed = Player('r')
 
 board = [
 ["o", "o", "o", "o", "o", "o", "o"],
