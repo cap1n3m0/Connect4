@@ -1,6 +1,3 @@
-print("this is a tset")
-print("testing recieved")
-
 board = [
 ["o", "o", "o", "o", "o", "o", "o"],
 ["o", "o", "o", "o", "o", "o", "o"],
@@ -11,9 +8,14 @@ board = [
 
 def printboard(board):
     for i in board:
-        print("| ", end="")
         for l in i:
             print(l, end="")
-            print(" | ", end="")
         print("")
-        print("-----------------------------")
+
+printboard(board)
+
+xPos = 0
+yPos  = 0
+print("Choose a position")
+input(xPos)  
+input(yPos) 
