@@ -23,7 +23,7 @@ board = [
 def printboard(board):
     for i in board:
         for l in i:
-            print(l, end=" ")
+            print(l, end="")
         print("")
 
 
@@ -31,8 +31,7 @@ def placePiece(board, color, col):
     counter = 0
     for i in board:
         if i[col] == "o":
-            board[counter - 1][col] = color
-    print("printing board")
+            board[counter - 1][col - 1] = color 
     printboard(board)
     
     
