@@ -60,6 +60,24 @@ def hasWon(board, color):
 
             if currentStreak == 4:
                 return True
+     
+    
+    #Diagonals
+    for i in list(range(3)):
+        for l in list(range(2)):
+            if board[i][l] == color:
+                if board[i + 1][l + 1]:
+                    if board[i + 2][l + 2]:
+                        if board[i + 3][l + 3]:
+                            return True
+
+    for i in list(range(3)):
+        for l in list(range(2, 7)):
+            if board[i][l] == color:
+                if board[i + 1][l - 1]:
+                    if board[i + 2][l - 2]:
+                        if board[i + 3][l - 3]:
+                            return True
     return False
 
 
