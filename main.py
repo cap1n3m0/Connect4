@@ -25,19 +25,6 @@ def printboard(board):
             print(l, end="")
         print("")
 
-
-
-def placePiece(board, color, col):
-    if not board[0][col] == "r" and not board[0][col] == "y":
-        counter = 0
-        for i in board:
-            if i[col] == "r" or i[col] == "y":
-                board[counter - 1][col] = color
-                return
-        board[-1][col] = color
-
-
-
 def placePiece(board, color, col):
     if board[0][col] == "o": 
         counter = 0
