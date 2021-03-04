@@ -1,3 +1,4 @@
+
 class Player:
     color = 'r'
     win = False
@@ -25,13 +26,15 @@ def printboard(board):
             print(l, end="")
         print("")
 
+
 def placePiece(board, color, col):
     counter = 0
     for i in board:
         if i[col] == "o":
             board[counter - 1][col] = color
             return
-
+    printboard(board)
+    
 
 def hasWon(board, color):
     #expected input (board, "r")
@@ -47,11 +50,10 @@ def hasWon(board, color):
                 currentStreak = 0
     
     #Columns
-    for i in list(range(5)):
+    for i in list(range(6)):
         currentStreak = 0
-        for l in list(range(6)):
-
-            if board[l][i] == color:
+        for l in list(range(5)):
+            if board[i][l] == color:
                 currentStreak += 1
             else: 
                 currentStreak = 0
