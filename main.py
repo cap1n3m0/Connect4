@@ -7,6 +7,8 @@ class Player:
 
 
 playerRed = Player('r')
+playerYellow = Player('y')
+currentPlayer = playerRed
 
 board = [
     ["o", "o", "o", "o", "o", "o", "o"],
@@ -40,16 +42,17 @@ def placePiece(board, colour, col):
 def hasWon(board, colour):
     # expected input (board, "r")
     # columns
+    global currentPlayer
     for i in board:
         currentStreak = 0
         for l in i:
             if l == colour:
-                if currentColour == colour:
-                    currentColour += 1
-                    if currentColour == 4:
+                if currentPlayer.color == colour:
+                    currentPlayer.color += 1
+                    if currentPlayer.color == 4:
                         return True
             else:
-                currentColour
+                pass
 
 
 xPos = 0
