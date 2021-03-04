@@ -1,25 +1,28 @@
 class Player:
     color = 'r'
     win = False
+
     def __init__(self, c):
         self.color = c
-        
-    
+
+
 playerRed = Player('r')
 
 board = [
-["o", "o", "o", "o", "o", "o", "o"],
-["o", "o", "o", "o", "o", "o", "o"],
-["o", "o", "o", "o", "o", "o", "o"],
-["o", "o", "o", "o", "o", "o", "o"],
-["o", "o", "o", "o", "o", "o", "o"],
-["o", "o", "o", "o", "o", "o", "o"],]
+    ["o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o"], ]
+
 
 def printboard(board):
     for i in board:
         for l in i:
             print(l, end="")
         print("")
+
 
 def placePiece(board, colour, col):
     if board[0][col] == "r" or board[0][col] == "y":
@@ -33,9 +36,10 @@ def placePiece(board, colour, col):
                 return board
         board[-1][col] = colour
 
+
 def hasWon(board, colour):
-    #expected input (board, "r")
-    #columns
+    # expected input (board, "r")
+    # columns
     for i in board:
         currentStreak = 0
         for l in i:
@@ -45,20 +49,16 @@ def hasWon(board, colour):
                     if currentColour == 4:
                         return True
             else:
-                currentColour 
-        
+                currentColour
+
+
 xPos = 0
-yPos  = 0
 win = False
 
-while not win: 
+while not win:
     print("Choose a position: ")
     xPos = int(input())
-    yPos = int(input())
-    placePiece()
+    placePiece(board, 'r', xPos)
     print("Choose a position: ")
     xPos = int(input())
-    yPos = int(input())
-        placePiece()
-
-
+    placePiece(board, 'y', xPos)
