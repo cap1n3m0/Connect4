@@ -16,10 +16,16 @@ printboard(board)
 
 xPos = 0
 yPos  = 0
-print("Choose a position")
-xPos = int(input())
-yPos = int(input())
+win = False
 
-board[xPos][yPos] = "r"
+while not win: 
+    print("Choose a position: ")
+    xPos = int(input())
+    yPos = int(input())
+    board[xPos][yPos] = "r"
+    print("Choose a position: ")
+    xPos = int(input())
+    yPos = int(input())
+    board[xPos][yPos] = "y"
 
 
