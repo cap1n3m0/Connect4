@@ -33,6 +33,20 @@ def placePiece(board, colour, col):
                 return board
         board[-1][col] = colour
 
+def hasWon(board, colour):
+    #expected input (board, "r")
+    #columns
+    for i in board:
+        currentStreak = 0
+        for l in i:
+            if l == colour:
+                if currentColour == colour:
+                    currentColour += 1
+                    if currentColour == 4:
+                        return True
+            else:
+                currentColour 
+        
 xPos = 0
 yPos  = 0
 win = False
