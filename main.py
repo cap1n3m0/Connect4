@@ -32,8 +32,9 @@ def placePiece(board, color, col):
     for i in board:
         if i[col] == "o":
             board[counter - 1][col] = color
-            return
+    print("printing board")
     printboard(board)
+    
     
 
 def hasWon(board, color):
