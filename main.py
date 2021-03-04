@@ -22,17 +22,31 @@ board = [
 
 def printboard(board):
     for i in board:
+        print("| ", end="")
         for l in i:
             print(l, end="")
+            print(" | ", end="")
         print("")
+        print("-----------------------------")
 
 
-def placePiece(board, color, col):
-    counter = 0
-    for i in board:
-        if i[col] == "o":
-            board[counter - 1][col - 1] = color 
-    printboard(board)
+def placePiece(board, colour, col):
+    if board[0][col] == "r" or board[0][col] == "y":
+        print("This column is full")
+        return False
+    else:
+        counter = 0
+        for i in board:
+            if i[col] == "r" or i[col] == "y":
+                board[counter][col - 1] = colour
+                print("print board")
+                printboard(board)
+                return True
+        if board[5][col] == "o":
+            print("printing board")
+            
+            board[5][col] = colour
+            printboard(board)
     
     
 
