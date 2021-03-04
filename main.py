@@ -26,15 +26,11 @@ def printboard(board):
         print("")
 
 def placePiece(board, color, col):
-    if board[0][col] == "o": 
-        counter = 0
-        for i in board:
-            if i[col] == "r" or i[col] == "y":
-                board[counter - 1][col] = color
-                return
-        board[-1][col] = color
-    else:
-        print("Cannot place here!")
+    counter = 0
+    for i in board:
+        if i[col] == "o":
+            board[counter - 1][col] = color
+            return
 
 
 def hasWon(board, color):
