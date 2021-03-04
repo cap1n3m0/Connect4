@@ -12,28 +12,30 @@ def printboard(board):
             print(l, end="")
         print("")
 
-
-def checkWin(): 
-    pass
-
-
-printboard(board)
+def placePiece(board, colour, col):
+    if board[0][col] == "r" or board[0][col] == "y":
+        print("This column is full")
+        return board
+    else:
+        counter = 0
+        for i in board:
+            if i[col] == "r" or i[col] == "y":
+                board[counter - 1][col] = colour
+                return board
+        board[-1][col] = colour
 
 xPos = 0
 yPos  = 0
 win = False
 
 while not win: 
-    print("Player red, choose a position: ")
+    print("Choose a position: ")
     xPos = int(input())
     yPos = int(input())
     board[xPos][yPos] = "r"
-    if checkWin("r"):
-        win = True
-    print("Player yellow, choose a position: ")
+    print("Choose a position: ")
     xPos = int(input())
     yPos = int(input())
     board[xPos][yPos] = "y"
-    if checkWin("y"):
-        win = True
+
 
