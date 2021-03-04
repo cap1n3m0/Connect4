@@ -17,5 +17,9 @@ printboard(board)
 xPos = 0
 yPos  = 0
 print("Choose a position")
-input(xPos)  
-input(yPos) 
+xPos = int(input())
+yPos = int(input())
+
+board[xPos][yPos] = "r"
+
+
