@@ -43,8 +43,9 @@ def placePiece(board, colour, col):
                 board[counter - 1][col] = colour
                 print("print board")
                 printboard(board)
-                counter += 1
+                
                 return True
+            counter += 1
         if board[5][col] == "o":
             print("printing board")
             
