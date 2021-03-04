@@ -1,3 +1,12 @@
+class Player:
+    color = 'r'
+    win = False
+    def __init__(self, c):
+        self.color = c
+        
+    
+playerRed = Player()
+
 board = [
 ["o", "o", "o", "o", "o", "o", "o"],
 ["o", "o", "o", "o", "o", "o", "o"],
@@ -32,10 +41,10 @@ while not win:
     print("Choose a position: ")
     xPos = int(input())
     yPos = int(input())
-    board[xPos][yPos] = "r"
+    placePiece()
     print("Choose a position: ")
     xPos = int(input())
     yPos = int(input())
-    board[xPos][yPos] = "y"
+        placePiece()
 
 
