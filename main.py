@@ -59,9 +59,12 @@ xPos = 0
 win = False
 
 while not win:
+    currentPlayer = playerRed
     print("Choose a position: ")
     xPos = int(input())
     placePiece(board, 'r', xPos)
-    print("Choose a position: ")
-    xPos = int(input())
-    placePiece(board, 'y', xPos)
+    if not hasWon(board, 'r'):
+        currentPlayer = playerYellow
+        print("Choose a position: ")
+        xPos = int(input())
+        placePiece(board, 'y', xPos)
