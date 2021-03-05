@@ -39,7 +39,7 @@ def placePiece(board, colour, col):
         counter = 0
         for i in board:
             if i[col] == "r" or i[col] == "y":
-                print(counter)
+
                 board[counter - 1][col] = colour
                 print("print board")
                 printboard(board)
