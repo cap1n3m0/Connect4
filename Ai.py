@@ -88,8 +88,8 @@ def checkThree(board, piece):
     colAmount = len(board[0])
     emptyspaceChar = Ai.emptyspaceChar
 
-    for r in range(rowAmount-1):
-        for c in range(colAmount-1):
+    for r in range(rowAmount):
+        for c in range(colAmount):
             if c < colAmount-3:
                 # check horizontal right
                 if board[r][c] == board[r][c+1] == board[r][c+2] == piece and board[r][c+3] == emptyspaceChar:
@@ -124,8 +124,8 @@ def checkTwo(board, piece):
     colAmount = len(board[0])
     emptyspaceChar = Ai.emptyspaceChar
 
-    for r in range(rowAmount-1):
-        for c in range(colAmount-1):
+    for r in range(rowAmount):
+        for c in range(colAmount):
             if c < colAmount-3:
                 # check horizontal right
                 if board[r][c] == board[r][c+1] == piece and board[r][c+2] == board[r][c+3] == emptyspaceChar:
