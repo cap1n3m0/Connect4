@@ -115,3 +115,4 @@ def runOne():
             print("Player yellow, choose a position: ")
             xPos = int(input())
             placePiece(board, currentPlayer.color, xPos)
+            win = not hasWon(board, "y")
