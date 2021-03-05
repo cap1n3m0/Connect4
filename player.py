@@ -1,3 +1,4 @@
+#Player class that holds, if they won and their colour
 class Player:
     color = 'r'
     win = False
