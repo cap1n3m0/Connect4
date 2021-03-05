@@ -93,10 +93,10 @@ def checkDiagonals(board, color):
                             return True
 
 def hasWon(board, color):
-    if not checkRows(board, color):
-        if not checkColumns(board, color):
-            if not checkDiagonals(board, color):
-                return False
+    if checkRows(board, color) or checkColumns(board, color) or checkDiagonals(board, color):
+        return True
+    else:
+        return False
 
 
 xPos = 0
