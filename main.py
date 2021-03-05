@@ -1,4 +1,4 @@
-import Player.py
+import Player
 
 playerRed = Player('r')
 playerYellow = Player('y')
