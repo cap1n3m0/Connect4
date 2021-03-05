@@ -64,16 +64,18 @@ def checkRows(board, color):
 
 
 def checkColumns (board, color): 
-    for i in list(range(6)):
+    for i in range(7):
         currentStreak = 0
-        for l in list(range(5)):
-            if board[i][l] == color:
+        for l in range(6):
+            if board[l][i] == color:
                 currentStreak += 1
             else: 
                 currentStreak = 0
             
             if currentStreak == 4:
                 return True
+    
+    return False
 
 
 def checkDiagonals(board, color):
