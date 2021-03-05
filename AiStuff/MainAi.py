@@ -126,5 +126,3 @@ def runAI():
         else:
             print("You lost!\nBetter Luck next time!\n")
             break
-
-runAI()
