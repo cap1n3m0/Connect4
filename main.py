@@ -60,6 +60,7 @@ def checkRows(board, color):
                     return True
             else:
                 currentStreak = 0
+    return False
 
 
 def checkColumns (board, color): 
