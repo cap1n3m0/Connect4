@@ -76,18 +76,20 @@ def checkDiagonals(board, color):
     for i in list(range(3)):
         for l in list(range(2)):
             if board[i][l] == color:
-                if board[i + 1][l + 1]:
-                    if board[i + 2][l + 2]:
-                        if board[i + 3][l + 3]:
+                if board[i + 1][l + 1] == color:
+                    if board[i + 2][l + 2] == color:
+                        if board[i + 3][l + 3] == color:
+
                             return True
 
     for i in list(range(3)):
         for l in list(range(2, 7)):
             if board[i][l] == color:
-                if board[i + 1][l - 1]:
-                    if board[i + 2][l - 2]:
-                        if board[i + 3][l - 3]:
+                if board[i + 1][l - 1] == color:
+                    if board[i + 2][l - 2] == color:
+                        if board[i + 3][l - 3] == color:
                             return True
+    return False
 
 #calls the other 3 winning functions (checkrow, checkcol, and checkDiagnol) and returns True if someone won
 def hasWon(board, color):
