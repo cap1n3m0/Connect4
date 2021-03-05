@@ -1,4 +1,4 @@
-
+#Player class that holds, if they won and their colour
 class Player:
     color = 'r'
     win = False
@@ -19,7 +19,7 @@ board = [
     ["o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o"], ]
 
-
+#displays the board
 def printboard(board):
     for i in board:
         print("| ", end="")
@@ -29,7 +29,7 @@ def printboard(board):
         print("")
         print("-----------------------------")
 
-
+#places the peice in whatever col they input
 def placePiece(board, colour, col):
     col -= 1
     if not board[0][col] == "o":
@@ -49,7 +49,7 @@ def placePiece(board, colour, col):
             board[5][col] = colour
             printboard(board)
     
-
+#checks rows if someone won
 def checkRows(board, color): 
     for i in board:
         currentStreak = 0
@@ -62,7 +62,7 @@ def checkRows(board, color):
                 currentStreak = 0
     return False
 
-
+#checks col if someone won
 def checkColumns (board, color): 
     for i in range(7):
         currentStreak = 0
@@ -77,7 +77,7 @@ def checkColumns (board, color):
     
     return False
 
-
+#checks diagonals if someone won
 def checkDiagonals(board, color):
     for i in list(range(3)):
         for l in list(range(2)):
@@ -95,6 +95,7 @@ def checkDiagonals(board, color):
                         if board[i + 3][l - 3]:
                             return True
 
+#calls the other 3 winning functions (checkrow, checkcol, and checkDiagnol) and returns True if someone won
 def hasWon(board, color):
     if checkRows(board, color) or checkColumns(board, color) or checkDiagonals(board, color):
         return True
