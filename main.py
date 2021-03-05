@@ -1,4 +1,5 @@
-import Player
+from Player import Player
+import Ai
 
 playerRed = Player('r')
 playerYellow = Player('y')
