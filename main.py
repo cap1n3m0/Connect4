@@ -32,31 +32,25 @@ def printboard(board):
 
 def placePiece(board, colour, col):
     col -= 1
-    if board[0][col] == "r" or board[0][col] == "y":
+    if not board[0][col] == "o":
         print("This column is full")
         return False
     else:
         counter = 0
         for i in board:
-            if i[col] == "r" or i[col] == "y":
-
+            if not i[col] == "o":
+                print(counter)
                 board[counter - 1][col] = colour
-                print("print board")
                 printboard(board)
                 
                 return True
             counter += 1
         if board[5][col] == "o":
-            print("printing board")
-            
             board[5][col] = colour
             printboard(board)
     
-    
 
-def hasWon(board, color):
-    #expected input (board, "r")
-    #Rows
+def checkRows(board, color): 
     for i in board:
         currentStreak = 0
         for l in i:
@@ -66,21 +60,22 @@ def hasWon(board, color):
                     return True
             else:
                 currentStreak = 0
-    
-    #Columns
+
+
+def checkColumns (board, color): 
     for i in list(range(6)):
         currentStreak = 0
-        for l in list(range(5)):
-            if board[i][l] == color:
-                currentStreak += 1
-            else: 
-                currentStreak = 0
+    for l in list(range(5)):
+        if board[i][l] == color:
+            currentStreak += 1
+        else: 
+            currentStreak = 0
 
-            if currentStreak == 4:
-                return True
-     
-    
-    #Diagonals
+        if currentStreak == 4:
+            return True
+
+
+def checkDiagonals(board, color):
     for i in list(range(3)):
         for l in list(range(2)):
             if board[i][l] == color:
@@ -96,7 +91,12 @@ def hasWon(board, color):
                     if board[i + 2][l - 2]:
                         if board[i + 3][l - 3]:
                             return True
-    return False
+
+def hasWon(board, color):
+    if not checkRows(board, color):
+        if not checkColumns(board, color):
+            if not checkDiagonals(board, color):
+                return False
 
 
 xPos = 0
@@ -104,11 +104,11 @@ win = False
 
 while not win:
     currentPlayer = playerRed
-    print("Choose a position: ")
+    print("Player red, choose a position: ")
     xPos = int(input())
-    placePiece(board, 'r', xPos)
+    placePiece(board, currentPlayer.color, xPos)
     if not hasWon(board, 'r'):
         currentPlayer = playerYellow
-        print("Choose a position: ")
+        print("Player yellow, choose a position: ")
         xPos = int(input())
-        placePiece(board, 'y', xPos)
+        placePiece(board, currentPlayer.color, xPos)
