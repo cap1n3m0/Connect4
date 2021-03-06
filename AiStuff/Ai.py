@@ -179,7 +179,6 @@ def pickBestMove(board, piece, AIpiece, PLAYERpiece):
         placePiece(temp_board, piece, col)
 
         if hasWon(temp_board, AIpiece):
-            print("Hello")
             score = Ai.returnValue
         else:
             score = calculate_score(board, AIpiece, PLAYERpiece)
@@ -194,7 +193,6 @@ def pickBestMove(board, piece, AIpiece, PLAYERpiece):
 def findPlayableLocations(board):
     playableLocations = []
     colAmount = len(board[0])
-    print(colAmount)
 
     for col in range(colAmount-1):
         if vaildLocation(board, col+1):
@@ -299,7 +297,7 @@ class Ai:
                 
                 else:
                     return (self.lastCol, 0)
-                    
+
             else:
                 return (self.lastCol, calculate_score(board, self.aiColor, self.playerColor))
         
