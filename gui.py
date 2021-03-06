@@ -12,18 +12,19 @@ class Color:
 
 
 def setCords(): 
-    x = 165
-    y = 205
-    spacing = 53
+    x = 168
+    y = 210
+    spacingX = 53
+    spacingY = 4
     cords = []
     for i in range(6):
         cords.append([])
         for l in range(7):
             cords[i].append((x, y))
-            x += 38 + spacing
+            x += 38 + spacingX
 
-        x = 164
-        y += 80
+        x = 168
+        y += (38*2) + spacingY
 
     return cords
 
@@ -47,8 +48,8 @@ class Piece:
 
 #                    (x, y) surface (r,g,b) radius
 def showPieceOnMouse(mousePos, win, color, radius):
-    if mousePos[0] < 165:
-        pygame.draw.circle(win, color, (165, 130), radius)
+    if mousePos[0] < 130:
+        pygame.draw.circle(win, color, (130, 130), radius)
     elif mousePos[0] > 745:
         pygame.draw.circle(win, color, (745, 130), radius)
     else:
@@ -61,32 +62,38 @@ def getXPosBounds(cords):
 
     for pos in cords[0]:
         x = pos[0]
-        temp.append(x)
+        temp.append(x-38)
 
     i = 0
-    while len(temp) > 2:
-        xRanges[i] = [temp[0], temp[1]]
-        i += 1
-        temp.pop(0)
-        temp.pop(0)
+    while len(temp) > 0:
+        if i > 0:
+            xRanges[i] = [xRanges[i-1][1], temp[0]]
+            i += 1
+            temp.pop(0)
+        else:
+            xRanges[i] = [temp[0]-38, temp[1]]
+            i += 1
+            temp.pop(0)
+            temp.pop(0)
+    
+    xRanges[i] = [xRanges[i-1][1], 745]
     
     return xRanges
 
 def getRowPos(mousePos, bounds):
     X = mousePos[0]
-    for i in range(len(bounds)):
-        if bounds[i][0] < X < bounds[i][1]:
-            return i + 1
+    if 130 < X < 745:
+        for i in range(len(bounds)):
+            if bounds[i][0] < X < bounds[i][1]:
+                return i + 1
+    else:
+        return False
 
 def drawWindow(win, pieces):
-    # Fill the background
-    win.fill(Color.WHITE)
-
-    for piece in pieces:
-        piece.draw(win)
-    
-    # Update the screen
-    pygame.display.update()
+    # draw the pieces
+    for row in pieces:
+        for piece in row:
+            piece.draw(win)
 
 def turnOnPiece(board, pieces):
     for rowNum, row in enumerate(board):
@@ -127,14 +134,26 @@ def dropPiece(col, cords, board, color, rowInDrop, active):
 
 
 def main(AiYN=False):
+
+    board = [
+        ["o", "o", "o", "o", "o", "o", "o"],
+        ["o", "o", "o", "o", "o", "o", "o"],
+        ["o", "o", "o", "o", "o", "o", "o"],
+        ["o", "o", "o", "o", "o", "o", "o"],
+        ["o", "o", "o", "o", "o", "o", "o"],
+        ["o", "o", "o", "o", "o", "o", "o"]
+    ]
+
     coords = setCords()
     bounds = getXPosBounds(coords)
     
-    SIZE = (900, 1100)
+    SIZE = (900, 900)
     WIN = pygame.display.set_mode(SIZE)
     clock = pygame.time.Clock()
-    FONT = pygame.font.init()
-    boardImg = pygame.image.load("Connect4Board.png")   
+    pygame.font.init()
+    cwd = os.getcwd()
+    path = os.path.join(cwd, "Connect4", "Connect4Board.png")
+    boardImg = pygame.image.load(path)   
     playerturn = True
     if AiYN is False:
         Player1 = Player("r")
@@ -166,66 +185,66 @@ def main(AiYN=False):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.display.quit()
+                break
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # if it is the users turn then place piece
+                if AiYN is False:
+                    col = getRowPos(pygame.mouse.get_pos(), bounds)
+                    if col is not False:
+                        # If its player turn then drop piece
+                        result = placePiece(board, currentPlayer.color, col)
+                        if result is False:
+                            num = random.randint(-1, 1)
+                            while result is False:
+                                result = placePiece(board, currentPlayer.color, col+num)
                 
-                col = getRowPos(pygame.mouse.get_pos(), bounds)
-                # If its player turn then drop piece
-                result = placePiece(board, currentPlayer.color, col)
-                while result is False:
-                    num = random.randint(-1, 1)
-                    result = placePiece(board, currentPlayer.color, col+num)
-                
-                # if it is not users turn then place othr piece
+                else:
+                    if currentPlayer is Player2:
+                        col = getRowPos(pygame.mouse.get_pos(), bounds)
+                        if col is not False and col is not None:
+                            # If its player turn then drop piece
+                            result = placePiece(board, currentPlayer.color, col)
+                            if result is False:
+                                num = random.randint(-1, 1)
+                                while result == False:
+                                    result = placePiece(board, currentPlayer.color, col+num)
+                            
+                            currentPlayer = AiPiece
         
         # game logic
             
         if AiYN is False:
             if playerturn:
-                showPieceOnMouse(mousePos, WIN, Color.RED, 38)
+                showPieceOnMouse(mousePos, WIN, currentPlayer.color, 38)
                 currentPlayer = Player2
             else:
-                
+                showPieceOnMouse(mousePos, WIN, currentPlayer.color, 38)
                 currentPlayer = Player1
                 
             playerturn = not playerturn
 
         elif AiYN:
-            if currentPlayer is AiPiece:
+            if currentPlayer == AiPiece:
+                print("Ai thinking...")
                 xPos = AiPiece.minMax(board, 5, float("-inf"), float("inf"), True)[0]
+                print(f"xPos: {xPos}")
                 result = placePiece(board, AiPiece.color, xPos)
-                if result == False:
-                    xPos += 1
-                    result = placePiece(board, AiPiece.color, xPos)
+                if result is False:
+                    num = random.randint(-1, 1)
+                    while result == False:
+                        result = placePiece(board, currentPlayer.color, xPos+num)
                 currentPlayer = Player2
             
             else:
-                showPieceOnMouse(mousePos, WIN, Color.YELLOW, 38)
-                dropPiece()
-                # player 2 things
-
-                currentPlayer = Player2
-        '''
-        if not hasWon(board, 'r'):
-            currentPlayer = playerYellow
-            print("Player yellow, choose a position: ")
-            xPos = int(input())
-            placePiece(board, currentPlayer.color, xPos)
-            if hasWon(board, "y"):
-                print("You Won")
-        else:
-            print("You lost!\nBetter Luck next time!\n")
-            break
-            '''
-            
-            
+                showPieceOnMouse(mousePos, WIN, (255, 255, 0), 38)
                 
         # Displaying the screen
         WIN.fill((255, 255, 255))
-
-        #               mousePos, win, color, radius
-        showPieceOnMouse(mousePos, WIN, Color.RED, 38)
         
+        # Turn on all pieces that need to be turned on based off the board
         turnOnPiece(board, pieces)
+        drawWindow(WIN, pieces)
         WIN.blit(boardImg, (120, 170))
         pygame.display.update()           

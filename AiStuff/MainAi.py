@@ -6,14 +6,7 @@ playerRed = Ai.Ai("r", "y")
 playerYellow = Player('y')
 currentPlayer = playerRed
 
-board = [
-    ["o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o"]
-]
+
 
 #displays the board
 def printboard(board):
@@ -29,20 +22,17 @@ def printboard(board):
 def placePiece(board, colour, col):
     col -= 1
     if not board[0][col] == "o":
-        print("This column is full")
         return False
     else:
         counter = 0
         for i in board:
             if not i[col] == "o":
                 board[counter - 1][col] = colour
-                printboard(board)
                 
                 return True
             counter += 1
         if board[5][col] == "o":
             board[5][col] = colour
-            printboard(board)
             return True
     
 #checks rows if someone won
