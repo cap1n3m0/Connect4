@@ -1,6 +1,6 @@
 from Player import Player
 import os
-import Ai
+from AiStuff import Ai
 
 playerRed = Ai.Ai("r", "y")
 playerYellow = Player('y')

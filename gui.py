@@ -1,6 +1,6 @@
 import pygame
 import random
-import AiStuff.Ai as Ai
+import AiStuff.Ai as AI
 from AiStuff.MainAi import *
 from Player import Player
 
@@ -104,8 +104,7 @@ def turnOnPiece(board, pieces):
 def main(Ai=False):
     coords = setCords()
     bounds = getXPosBounds(coords)
-    AiPiece = Ai.Ai(AiPiece="r", playerPiece="y")
-    gamemode = "player"
+    AiPiece = AI.Ai(aiColor="r", playerColor="y")
     
     SIZE = (900, 1100)
     WIN = pygame.display.set_mode(SIZE)
@@ -151,7 +150,7 @@ def main(Ai=False):
             result = placePiece(board, AiPiece.Color, xPos)
             if result == False:
                 xPos += 1
-                result = placePiece(board, currentPlayer.color, xPos)
+                result = placePiece(board, AiPiece.color, xPos)
         
         if not hasWon(board, 'r'):
             currentPlayer = playerYellow

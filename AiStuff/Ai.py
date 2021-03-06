@@ -80,7 +80,7 @@ def vaildLocation(board, col):
         for i in board:
             if i[col] == "o":
                 return True
-           counter += 1
+            counter += 1
     else:
         return False
             
@@ -206,7 +206,7 @@ class Ai:
     returnValue = 1000000000000
     emptyspaceChar = "o"
 
-    def __init__(self, aiColor, playerColor):
+    def __init__(self, aiColor="r", playerColor="y"):
         self.color = aiColor
         self.aiColor = aiColor
         self.playerColor = playerColor
