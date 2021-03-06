@@ -11,23 +11,6 @@ class Color:
     YELLOW = (255, 255, 0)
 
 
-def setCords(): 
-    x = 168
-    y = 210
-    spacingX = 53
-    spacingY = 4
-    cords = []
-    for i in range(6):
-        cords.append([])
-        for l in range(7):
-            cords[i].append((x, y))
-            x += 38 + spacingX
-
-        x = 168
-        y += (38*2) + spacingY
-
-    return cords
-
 class Piece:
     def __init__(self, color, pos):
         self.color = color
@@ -46,7 +29,24 @@ class Piece:
         if self.active is True:
             pygame.draw.circle(win, self.color, self.pos, self.radius)
 
-#                    (x, y) surface (r,g,b) radius
+
+def setCords(): 
+    x = 168
+    y = 210
+    spacingX = 53
+    spacingY = 4
+    cords = []
+    for i in range(6):
+        cords.append([])
+        for l in range(7):
+            cords[i].append((x, y))
+            x += 38 + spacingX
+
+        x = 168
+        y += (38*2) + spacingY
+
+    return cords
+
 def showPieceOnMouse(mousePos, win, color, radius):
     if mousePos[0] < 130:
         pygame.draw.circle(win, color, (130, 130), radius)
@@ -54,7 +54,6 @@ def showPieceOnMouse(mousePos, win, color, radius):
         pygame.draw.circle(win, color, (745, 130), radius)
     else:
         pygame.draw.circle(win, color, (mousePos[0], 130), radius)
-
 
 def getXPosBounds(cords):
     xRanges = {}
