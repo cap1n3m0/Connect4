@@ -43,14 +43,14 @@ def switchToAi():
     run = False
     pygame.display.quit()
     time.sleep(0.3)
-    gui.main(Ai=True)
+    gui.main(AiYN=True)
 
 
 def switchToPlayer():
     run = False 
     pygame.display.quit()
     time.sleep(0.3)
-    gui.main(Ai=False)
+    gui.main(AiYN=False)
 
 Buttons = []
 

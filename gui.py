@@ -1,6 +1,6 @@
 import pygame
 import random
-import AiStuff.Ai as AI
+import AiStuff.Ai as Ai
 from AiStuff.MainAi import *
 from Player import Player
 
@@ -8,6 +8,8 @@ from Player import Player
 class Color:
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
+    YELLOW = (255, 255, 0)
+
 
 def setCords(): 
     x = 165
@@ -74,7 +76,7 @@ def getRowPos(mousePos, bounds):
     X = mousePos[0]
     for i in range(len(bounds)):
         if bounds[i][0] < X < bounds[i][1]:
-            return i
+            return i + 1
 
 def drawWindow(win, pieces):
     # Fill the background
@@ -101,25 +103,58 @@ def turnOnPiece(board, pieces):
                 if pieces[rowNum][colNum].active is True:
                     pieces[rowNum][colNum].active = False
 
-def main(Ai=False):
+
+def dropPiece(col, cords, board, color, rowInDrop, active):
+    # change the y pos of the piece until it reaches anothjer piece or the bottom
+    
+    # vaildMoves = [0, 1, 2, 3, 4, 5]
+    vaildMoves = Ai.findPlayableLocations(board)
+
+    if col in vaildMoves:
+        # y pos changing
+        pos = cords[rowInDrop][col]
+        if active:
+            if board[rowInDrop][col] == "o":
+                board[rowInDrop][col] = color
+            else:
+                # im done
+                return True
+        else:
+            if board[rowInDrop][col] == "r" or board[rowInDrop][col] == "y":
+                board[rowInDrop][col] = color
+            else:
+                return True
+
+
+def main(AiYN=False):
     coords = setCords()
     bounds = getXPosBounds(coords)
-    AiPiece = AI.Ai(aiColor="r", playerColor="y")
     
     SIZE = (900, 1100)
     WIN = pygame.display.set_mode(SIZE)
     clock = pygame.time.Clock()
     FONT = pygame.font.init()
     boardImg = pygame.image.load("Connect4Board.png")   
+    playerturn = True
+    if AiYN is False:
+        Player1 = Player("r")
+        Player2 = Player("y")
+        currentPlayer = Player1
+    else:
+        AiPiece = Ai.Ai(aiColor="r", playerColor="y")
+        Player2 = Player("y")
+        currentPlayer = AiPiece
 
     run = True
     mousePos = pygame.mouse.get_pos()
 
     pieces = []
-    for i in coords:
-        for l in i:
-            piece = Piece(Color.RED, (l[0], l[1]))
-            pieces.append(piece)
+    for row in coords:
+        temp = []
+        for col in row:
+            piece = Piece(Color.RED, (col[0], col[1]))
+            temp.append(piece)
+        pieces.append(temp)
 
     FPS = 60
     # Game loop
@@ -132,26 +167,45 @@ def main(Ai=False):
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                row = getRowPos(pygame.mouse.get_pos(), bounds)
+                # if it is the users turn then place piece
+                
+                col = getRowPos(pygame.mouse.get_pos(), bounds)
                 # If its player turn then drop piece
+                result = placePiece(board, currentPlayer.color, col)
+                while result is False:
+                    num = random.randint(-1, 1)
+                    result = placePiece(board, currentPlayer.color, col+num)
+                
+                # if it is not users turn then place othr piece
         
         # game logic
             
-        if Ai is False:
-            if turn == "player1":
+        if AiYN is False:
+            if playerturn:
                 showPieceOnMouse(mousePos, WIN, Color.RED, 38)
-                turn = "player2"
-            elif turn == "player2":
-                showPieceOnMouse(mousePos, WIN, Color.RED, 38)
-                turn = "player1"
+                currentPlayer = Player2
+            else:
+                
+                currentPlayer = Player1
+                
+            playerturn = not playerturn
 
-        elif Ai:
-            xPos = AiPiece.minmax(board, 5, float("-inf"), float("inf"), True)[0]
-            result = placePiece(board, AiPiece.Color, xPos)
-            if result == False:
-                xPos += 1
+        elif AiYN:
+            if currentPlayer is AiPiece:
+                xPos = AiPiece.minMax(board, 5, float("-inf"), float("inf"), True)[0]
                 result = placePiece(board, AiPiece.color, xPos)
-        
+                if result == False:
+                    xPos += 1
+                    result = placePiece(board, AiPiece.color, xPos)
+                currentPlayer = Player2
+            
+            else:
+                showPieceOnMouse(mousePos, WIN, Color.YELLOW, 38)
+                dropPiece()
+                # player 2 things
+
+                currentPlayer = Player2
+        '''
         if not hasWon(board, 'r'):
             currentPlayer = playerYellow
             print("Player yellow, choose a position: ")
@@ -162,6 +216,7 @@ def main(Ai=False):
         else:
             print("You lost!\nBetter Luck next time!\n")
             break
+            '''
             
             
                 
