@@ -16,7 +16,7 @@ class Piece:
         self.color = color
         self.pos = pos
         self.active = False
-        self.radius = 38
+        self.radius = 40
 
     def draw(self, win):
         '''
@@ -31,7 +31,7 @@ class Piece:
 
 
 def setCords(): 
-    x = 168
+    x = 167
     y = 210
     spacingX = 53
     spacingY = 4
@@ -42,7 +42,7 @@ def setCords():
             cords[i].append((x, y))
             x += 38 + spacingX
 
-        x = 168
+        x = 167
         y += (38*2) + spacingY
 
     return cords
@@ -109,7 +109,6 @@ def turnOnPiece(board, pieces):
                 if pieces[rowNum][colNum].active is True:
                     pieces[rowNum][colNum].active = False
 
-
 def dropPiece(col, cords, board, color, rowInDrop, active):
     # change the y pos of the piece until it reaches anothjer piece or the bottom
     
@@ -146,18 +145,24 @@ def main(AiYN=False):
     coords = setCords()
     bounds = getXPosBounds(coords)
     
+    # pygame window setup
     SIZE = (900, 900)
     WIN = pygame.display.set_mode(SIZE)
     clock = pygame.time.Clock()
     pygame.font.init()
+
+    # Loading img
     cwd = os.getcwd()
-    path = os.path.join(cwd, "Connect4", "Connect4Board.png")
-    boardImg = pygame.image.load(path)   
+    path = os.path.join(cwd, "Connect4", "Connect4Board.png") if "Connect4" not in cwd else os.path.join(cwd, "Connect4Board.png")
+    boardImg = pygame.image.load(path)
+
+
     playerturn = True
     if AiYN is False:
         Player1 = Player("r")
         Player2 = Player("y")
         currentPlayer = Player1
+        lastPlayer = False
     else:
         AiPiece = Ai.Ai(aiColor="r", playerColor="y")
         Player2 = Player("y")
@@ -178,6 +183,11 @@ def main(AiYN=False):
     # Game loop
     while run:
         clock.tick(FPS)
+
+        # clear the screen
+        WIN.fill((255, 255, 255))
+
+        # get teh mouse pos
         mousePos = pygame.mouse.get_pos()
 
         # Pygame events
@@ -198,6 +208,7 @@ def main(AiYN=False):
                             num = random.randint(-1, 1)
                             while result is False:
                                 result = placePiece(board, currentPlayer.color, col+num)
+                        currentPlayer = Player2 if currentPlayer is Player1 else Player1
                 
                 else:
                     if currentPlayer is Player2:
@@ -216,19 +227,17 @@ def main(AiYN=False):
             
         if AiYN is False:
             if playerturn:
-                showPieceOnMouse(mousePos, WIN, currentPlayer.color, 38)
-                currentPlayer = Player2
+                color = (255, 0, 0) if currentPlayer.color == "r" else (255, 255, 0)
+                showPieceOnMouse(mousePos, WIN, color, 38)
             else:
-                showPieceOnMouse(mousePos, WIN, currentPlayer.color, 38)
-                currentPlayer = Player1
+                color = (255, 0, 0) if currentPlayer.color == "r" else (255, 255, 0)
+                showPieceOnMouse(mousePos, WIN, color, 38)
                 
             playerturn = not playerturn
 
         elif AiYN:
-            if currentPlayer == AiPiece:
-                print("Ai thinking...")
+            if currentPlayer is AiPiece:
                 xPos = AiPiece.minMax(board, 5, float("-inf"), float("inf"), True)[0]
-                print(f"xPos: {xPos}")
                 result = placePiece(board, AiPiece.color, xPos)
                 if result is False:
                     num = random.randint(-1, 1)
@@ -240,7 +249,6 @@ def main(AiYN=False):
                 showPieceOnMouse(mousePos, WIN, (255, 255, 0), 38)
                 
         # Displaying the screen
-        WIN.fill((255, 255, 255))
         
         # Turn on all pieces that need to be turned on based off the board
         turnOnPiece(board, pieces)
