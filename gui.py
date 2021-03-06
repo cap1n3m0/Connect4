@@ -109,6 +109,26 @@ def turnOnPiece(board, pieces):
                 if pieces[rowNum][colNum].active is True:
                     pieces[rowNum][colNum].active = False
 
+def didTie(board):
+    for i in board[0]:
+        if i == "o":
+            return False
+    return True
+    
+def displayWinner(win, color, winSize):
+    font = pygame.font.SysFont('comicsans', 60)
+    if color == "y":
+        text = font.render("You lost!", 1, (0,0,0))
+
+    elif color == "r":
+        text = font.render("You won!", 1, (0,0,0))
+
+    else:
+        text = font.render("It's a TIE!", 1, (0, 0, 0))
+    
+    win.blit(text, (int(winSize[0]/2)-text.get_width(), int(winSize[1]/2)-text.get_height()))
+
+
 def dropPiece(col, cords, board, color, rowInDrop, active):
     # change the y pos of the piece until it reaches anothjer piece or the bottom
     
@@ -162,7 +182,7 @@ def main(AiYN=False):
         Player1 = Player("r")
         Player2 = Player("y")
         currentPlayer = Player1
-        lastPlayer = False
+
     else:
         AiPiece = Ai.Ai(aiColor="r", playerColor="y")
         Player2 = Player("y")
@@ -198,60 +218,79 @@ def main(AiYN=False):
                 break
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # if it is the users turn then place piece
-                if AiYN is False:
-                    col = getRowPos(pygame.mouse.get_pos(), bounds)
-                    if col is not False:
-                        # If its player turn then drop piece
-                        result = placePiece(board, currentPlayer.color, col)
-                        if result is False:
-                            num = random.randint(-1, 1)
-                            while result is False:
-                                result = placePiece(board, currentPlayer.color, col+num)
-                        currentPlayer = Player2 if currentPlayer is Player1 else Player1
-                
-                else:
-                    if currentPlayer is Player2:
+                if hasWon(board, "r") is False and hasWon(board, "y") is False and didTie(board) is False:
+                    
+                    # if it is the users turn then place piece
+                    if AiYN is False:
                         col = getRowPos(pygame.mouse.get_pos(), bounds)
-                        if col is not False and col is not None:
+                        if col is not False:
                             # If its player turn then drop piece
                             result = placePiece(board, currentPlayer.color, col)
                             if result is False:
                                 num = random.randint(-1, 1)
-                                while result == False:
+                                while result is False:
                                     result = placePiece(board, currentPlayer.color, col+num)
-                            
-                            currentPlayer = AiPiece
+                            currentPlayer = Player2 if currentPlayer is Player1 else Player1
+                    
+                    else:
+                        if currentPlayer is Player2:
+                            col = getRowPos(pygame.mouse.get_pos(), bounds)
+                            if col is not False and col is not None:
+                                # If its player turn then drop piece
+                                result = placePiece(board, currentPlayer.color, col)
+                                if result is False:
+                                    num = random.randint(-1, 1)
+                                    while result == False:
+                                        result = placePiece(board, currentPlayer.color, col+num)
+                                
+                                currentPlayer = AiPiece
         
         # game logic
+        
+        if hasWon(board, "r") is False and hasWon(board, "y") is False and didTie(board) is False:
             
-        if AiYN is False:
-            if playerturn:
-                color = (255, 0, 0) if currentPlayer.color == "r" else (255, 255, 0)
-                showPieceOnMouse(mousePos, WIN, color, 38)
-            else:
-                color = (255, 0, 0) if currentPlayer.color == "r" else (255, 255, 0)
-                showPieceOnMouse(mousePos, WIN, color, 38)
-                
-            playerturn = not playerturn
+            if AiYN is False:
+                if playerturn:
+                    color = (255, 0, 0) if currentPlayer.color == "r" else (255, 255, 0)
+                    showPieceOnMouse(mousePos, WIN, color, 38)
+                else:
+                    color = (255, 0, 0) if currentPlayer.color == "r" else (255, 255, 0)
+                    showPieceOnMouse(mousePos, WIN, color, 38)
+                    
+                playerturn = not playerturn
 
-        elif AiYN:
-            if currentPlayer is AiPiece:
-                xPos = AiPiece.minMax(board, 5, float("-inf"), float("inf"), True)[0]
-                result = placePiece(board, AiPiece.color, xPos)
-                if result is False:
-                    num = random.randint(-1, 1)
-                    while result == False:
-                        result = placePiece(board, currentPlayer.color, xPos+num)
-                currentPlayer = Player2
-            
-            else:
-                showPieceOnMouse(mousePos, WIN, (255, 255, 0), 38)
+            elif AiYN:
+                if currentPlayer is AiPiece:
+                    xPos = AiPiece.minMax(board, 5, float("-inf"), float("inf"), True)[0]
+                    result = placePiece(board, AiPiece.color, xPos)
+                    if result is False:
+                        num = random.randint(-1, 1)
+                        while result == False:
+                            result = placePiece(board, currentPlayer.color, xPos+num)
+                    currentPlayer = Player2
+                
+                else:
+                    showPieceOnMouse(mousePos, WIN, (255, 255, 0), 38)
+        
+        elif hasWon(board, "r"):
+            displayWinner(WIN, "r", SIZE)
+        
+        elif hasWon(board, "y"):
+            displayWinner(WIN, "y", SIZE)
+        
+        elif didTie(board):
+            displayWinner(WIN, "HAHA IT'S A TIE HAHA", SIZE)
                 
         # Displaying the screen
         
         # Turn on all pieces that need to be turned on based off the board
         turnOnPiece(board, pieces)
+
+        # Draw all of the pieces
         drawWindow(WIN, pieces)
+
+        # Add the imag to the screen
         WIN.blit(boardImg, (120, 170))
+
+        # Update the screen
         pygame.display.update()           

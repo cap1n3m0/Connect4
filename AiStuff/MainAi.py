@@ -7,7 +7,6 @@ playerYellow = Player('y')
 currentPlayer = playerRed
 
 
-
 #displays the board
 def printboard(board):
     for i in board:
@@ -85,6 +84,8 @@ def checkDiagonals(board, color):
 
 #calls the other 3 winning functions (checkrow, checkcol, and checkDiagnol) and returns True if someone won
 def hasWon(board, color):
+    '''Returns True if the color has won
+    if not it returns False'''
     if checkRows(board, color) or checkColumns(board, color) or checkDiagonals(board, color):
         return True
     else:
