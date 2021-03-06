@@ -1,16 +1,24 @@
 import random
 
+# Did they tie?
+def didTie(board):
+    for i in board[0]:
+        if i == "o":
+            return False
+    return True
+    
 #checks rows if someone won
 def checkRows(board, color): 
-    for i in board:
+    for row in board:
         currentStreak = 0
-        for l in i:
-            if l == color:
+        for col in row:
+            if col == color:
                 currentStreak += 1
                 if currentStreak == 4:
                     return True
             else:
                 currentStreak = 0
+
     return False
 
 #checks col if someone won
@@ -50,7 +58,11 @@ def checkDiagonals(board, color):
 
 #calls the other 3 winning functions (checkrow, checkcol, and checkDiagnol) and returns True if someone won
 def hasWon(board, color):
+    # print(checkRows(board, color))
+    # print(checkColumns(board, color))
+    # print(checkDiagonals(board, color))
     if checkRows(board, color) or checkColumns(board, color) or checkDiagonals(board, color):
+        #print("ygckvbukgvbkuyghvkuyghvkyugvk")
         return True
     else:
         return False
@@ -167,10 +179,11 @@ def pickBestMove(board, piece, AIpiece, PLAYERpiece):
         placePiece(temp_board, piece, col)
 
         if hasWon(temp_board, AIpiece):
+            print("Hello")
             score = Ai.returnValue
         else:
             score = calculate_score(board, AIpiece, PLAYERpiece)
-        
+
         if score > bestScore:
             bestScore = score
             bestCol = col
@@ -181,25 +194,64 @@ def pickBestMove(board, piece, AIpiece, PLAYERpiece):
 def findPlayableLocations(board):
     playableLocations = []
     colAmount = len(board[0])
+    print(colAmount)
 
     for col in range(colAmount-1):
         if vaildLocation(board, col+1):
-            playableLocations.append(col)
+            playableLocations.append(col+1)
     
     return playableLocations
 
 # Calculate a score
 def calculate_score(board, AIpiece, PLAYERpiece):
-    threeScore = checkThree(board, AIpiece)*2
+    threeScore = checkThree(board, AIpiece)*4
     twoScore = checkTwo(board, AIpiece)*2
+    AiWon = hasWon(board, AIpiece)
 
-    playerThreeScore = checkThree(board, PLAYERpiece)*4
+    playerThreeScore = checkThree(board, PLAYERpiece)*8
     playerTwoScore = checkTwo(board, PLAYERpiece)*4
+    playerWon = hasWon(board, PLAYERpiece)
 
-    score = threeScore + twoScore - playerThreeScore - playerTwoScore
+    score = (threeScore + twoScore + 1000 if AiWon else 0) - (playerThreeScore + playerTwoScore + 1000 if playerWon else 0)
 
     return score
 
+def enemyCanWin(board, PLAYERpiece):
+    three_score = checkThree(board, PLAYERpiece)
+    if three_score > 0:
+        rowAmount = len(board)
+        colAmount = len(board[0])
+        emptyspaceChar = Ai.emptyspaceChar
+
+        for r in range(rowAmount-1):
+            for c in range(colAmount-1):
+                if c < colAmount-3:
+                    # check horizontal right
+                    if board[r][c] == board[r][c+1] == board[r][c+2] == PLAYERpiece and board[r][c+3] == emptyspaceChar:
+                        return c + 3
+                    
+                    if r < rowAmount-3:
+                        # check diagnoal right
+                        if board[r][c] == board[r+1][c+1] == board[r+2][c+2] == PLAYERpiece and board[r+3][c+3] == emptyspaceChar:
+                            return c + 3
+                
+                if c >= 3:
+                    # check horizontal left
+                    if board[r][c] == board[r][c-1] == board[r][c-2] == PLAYERpiece and board[r][c-3] == emptyspaceChar:
+                        return c - 3
+                    
+                    if r < rowAmount-3:
+                        # check diagnoal left
+                        if board[r][c] == board[r+1][c-1] == board[r+2][c-2] == PLAYERpiece and board[r+3][c-3] == emptyspaceChar:
+                            return c - 3
+                
+                if r < rowAmount-3:
+                    # chek vertical
+                    if (board[r][c] == board[r+1][c] == board[r+2][c] == PLAYERpiece and board[r+3][c] == emptyspaceChar) or (board[r+1][c] == board[r+2][c] == board[r+3][c] == PLAYERpiece and board[r][c] == emptyspaceChar):
+                        return c
+
+    else:
+        return None
 
 class Ai:
 
@@ -233,28 +285,30 @@ class Ai:
         playableLocations = findPlayableLocations(board)
         hasWonAi = hasWon(board, self.aiColor)
         hasWonPlayer = hasWon(board, self.playerColor)
-        isTie = False
+        isTie = didTie(board)
 
         terminal = True if hasWonAi or hasWonPlayer or isTie else False
 
         if depth == 0 or terminal:
             if terminal:
                 if hasWonAi:
-                    return (self.lastCol, Ai.returnValue)
+                    return (self.lastCol, float("inf"))
+
                 elif hasWonPlayer:
-                    return (self.lastCol, -Ai.returnValue)
+                    return (self.lastCol, float("-inf"))
                 
                 else:
                     return (self.lastCol, 0)
+                    
             else:
                 return (self.lastCol, calculate_score(board, self.aiColor, self.playerColor))
         
+        # Ai's turn
         if maximizingPlayer:
             value = self.Ninfinity
-            # print(playableLocations)
+            
             column = random.choice(playableLocations)
             for col in playableLocations:
-                col += 1
                 temp_board = self.makeBoardCopy(board)
                 placePiece(temp_board, self.aiColor, col)
 
@@ -264,20 +318,21 @@ class Ai:
                     value = newScore
                     column = col
                     self.lastCol = column
-                
+
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break
-            # print(f"Colum: {column}")
+
             return (column, value)
 
+        # Player's turn
         else:
             value = self.Pinfinity
             column = random.choice(playableLocations)
             for col in playableLocations:
-                col += 1
                 temp_board = self.makeBoardCopy(board)
                 placePiece(temp_board, self.playerColor, col)
+                playerWon = hasWon(temp_board, self.playerColor)
 
                 newScore = self.minMax(temp_board, depth-1, alpha, beta, True)[1]
 
@@ -286,8 +341,12 @@ class Ai:
                     column = col
                     self.lastCol = column
                 
+                # if playerWon:
+                #     value = float("inf")
+                #     print(beta)
+
                 alpha = min(alpha, value)
                 if alpha >= beta:
                     break
-            # print(column)
+            
             return (column, value)

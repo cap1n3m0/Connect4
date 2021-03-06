@@ -11,6 +11,41 @@ class Color:
     YELLOW = (255, 255, 0)
 
 
+class Button():
+    def __init__(self, color, x, y, width, height, text='', function=None, args=None):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+        self.function = function
+        self.args = args
+
+    def draw(self,  win, outline=None):
+        #Call this method to draw the button on the screen
+        if outline:
+            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            
+        pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),0)
+        
+        if self.text != '':
+            pygame.font.init()
+            font = pygame.font.SysFont('comicsans', 30)# 30 is Font size < ------------------------------------
+            text = font.render(self.text, 1, (0,0,0))
+            win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
+        
+
+    def isOver(self, pos):
+        print(pos)
+        #Pos is the mouse position or a tuple of (x,y) coordinates
+        if pos[0] > self.x and pos[0] < self.x + self.width:
+            if pos[1] > self.y and pos[1] < self.y + self.height:
+                return True
+            
+        return False
+
+
 class Piece:
     def __init__(self, color, pos):
         self.color = color
@@ -117,16 +152,16 @@ def didTie(board):
     
 def displayWinner(win, color, winSize):
     font = pygame.font.SysFont('comicsans', 60)
-    if color == "y":
+    if color == "r":
         text = font.render("You lost!", 1, (0,0,0))
 
-    elif color == "r":
+    elif color == "y":
         text = font.render("You won!", 1, (0,0,0))
 
     else:
         text = font.render("It's a TIE!", 1, (0, 0, 0))
     
-    win.blit(text, (int(winSize[0]/2)-text.get_width(), int(winSize[1]/2)-text.get_height()))
+    win.blit(text, (int(winSize[0]/2)-int(text.get_width()/2), int(winSize[1]/2)-int(text.get_height()/2)))
 
 
 def dropPiece(col, cords, board, color, rowInDrop, active):
@@ -271,15 +306,6 @@ def main(AiYN=False):
                 
                 else:
                     showPieceOnMouse(mousePos, WIN, (255, 255, 0), 38)
-        
-        elif hasWon(board, "r"):
-            displayWinner(WIN, "r", SIZE)
-        
-        elif hasWon(board, "y"):
-            displayWinner(WIN, "y", SIZE)
-        
-        elif didTie(board):
-            displayWinner(WIN, "HAHA IT'S A TIE HAHA", SIZE)
                 
         # Displaying the screen
         
@@ -291,6 +317,16 @@ def main(AiYN=False):
 
         # Add the imag to the screen
         WIN.blit(boardImg, (120, 170))
+
+        # Draw text to screen if game is over
+        if hasWon(board, "r"):
+            displayWinner(WIN, "r", SIZE)
+        
+        elif hasWon(board, "y"):
+            displayWinner(WIN, "y", SIZE)
+        
+        elif didTie(board):
+            displayWinner(WIN, "HAHA IT'S A TIE HAHA", SIZE)
 
         # Update the screen
         pygame.display.update()           
