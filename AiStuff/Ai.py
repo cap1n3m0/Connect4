@@ -80,7 +80,7 @@ def vaildLocation(board, col):
         for i in board:
             if i[col] == "o":
                 return True
-            counter += 1
+           counter += 1
     else:
         return False
             
@@ -291,5 +291,3 @@ class Ai:
                     break
             # print(column)
             return (column, value)
-
-
