@@ -1,4 +1,3 @@
-import os
 
 #displays the board
 def printboard(board):
