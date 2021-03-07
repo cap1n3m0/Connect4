@@ -39,7 +39,7 @@ def checkColumns (board, color):
 #checks diagonals if someone won
 def checkDiagonals(board, color):
     for i in list(range(3)):
-        for l in list(range(2)):
+        for l in list(range(4)):
             if board[i][l] == color:
                 if board[i + 1][l + 1] == color:
                     if board[i + 2][l + 2] == color:
@@ -47,7 +47,7 @@ def checkDiagonals(board, color):
                             return True
 
     for i in list(range(3)):
-        for l in list(range(2, 7)):
+        for l in list(range(3, 7)):
             if board[i][l] == color:
                 if board[i + 1][l - 1] == color:
                     if board[i + 2][l - 2] == color:
