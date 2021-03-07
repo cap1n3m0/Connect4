@@ -1,6 +1,4 @@
-from Player import Player
 import gui
-from one import *
 import pygame
 import time
 

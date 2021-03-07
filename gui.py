@@ -2,7 +2,7 @@ import pygame
 import random
 import AiStuff.Ai as Ai
 from AiStuff.MainAi import *
-from Player import Player
+from AiStuff.Player import Player
 
 
 class Color:
@@ -162,7 +162,6 @@ def displayWinner(win, color, winSize):
         text = font.render("It's a TIE!", 1, (0, 0, 0))
     
     win.blit(text, (int(winSize[0]/2)-int(text.get_width()/2), int(winSize[1]/2)-int(text.get_height()/2)))
-
 
 def dropPiece(col, cords, board, color, rowInDrop, active):
     # change the y pos of the piece until it reaches anothjer piece or the bottom
