@@ -1,11 +1,5 @@
 from Player import Player
 import os
-from AiStuff import Ai
-
-playerRed = Ai.Ai("r", "y")
-playerYellow = Player('y')
-currentPlayer = playerRed
-
 
 #displays the board
 def printboard(board):
@@ -90,30 +84,3 @@ def hasWon(board, color):
         return True
     else:
         return False
-
-
-xPos = 0
-win = False
-
-def runAI(): 
-    global xPos
-    global win
-    while not win:
-        os.system("cls")
-        currentPlayer = playerRed
-        xPos = currentPlayer.minMax(board, 5, float("-inf"), float("inf"), True)[0]
-        print(f"Ai chose to go in column: '{xPos}'\n")
-        result = placePiece(board, currentPlayer.color, xPos)
-        if result == False:
-            xPos += 1
-            result = placePiece(board, currentPlayer.color, xPos)
-        
-        if not hasWon(board, 'r'):
-            currentPlayer = playerYellow
-            print("Player yellow, choose a position: ")
-            xPos = int(input())
-            placePiece(board, currentPlayer.color, xPos)
-            win = hasWon(board, "y")
-        else:
-            print("You lost!\nBetter Luck next time!\n")
-            break
