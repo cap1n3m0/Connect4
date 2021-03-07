@@ -3,6 +3,7 @@ import random
 import AiStuff.Ai as Ai
 from AiStuff.MainAi import *
 from AiStuff.Player import Player
+import os   
 
 
 class Color:
