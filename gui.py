@@ -264,18 +264,24 @@ def main(AiYN=False):
                             if result is False:
                                 num = random.randint(-1, 1)
                                 while result is False:
+                                    if col == len(board[0]):
+                                        col = 1
+                                        result = placePiece(board, currentPlayer.color, col)
                                     result = placePiece(board, currentPlayer.color, col+num)
                             currentPlayer = Player2 if currentPlayer is Player1 else Player1
                     
                     else:
                         if currentPlayer is Player2:
                             col = getRowPos(pygame.mouse.get_pos(), bounds)
-                            if col is not False and col is not None:
+                            if col is not False:
                                 # If its player turn then drop piece
                                 result = placePiece(board, currentPlayer.color, col)
                                 if result is False:
                                     num = random.randint(-1, 1)
                                     while result == False:
+                                        if col == len(board[0]):
+                                            col = 1
+                                            result = placePiece(board, currentPlayer.color, col)
                                         result = placePiece(board, currentPlayer.color, col+num)
                                 
                                 currentPlayer = AiPiece
@@ -301,6 +307,8 @@ def main(AiYN=False):
                     if result is False:
                         num = random.randint(-1, 1)
                         while result == False:
+                            if xPos == len(board[0]):
+                                xPos = 1
                             result = placePiece(board, currentPlayer.color, xPos+num)
                     currentPlayer = Player2
                 

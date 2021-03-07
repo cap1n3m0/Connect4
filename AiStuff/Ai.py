@@ -206,50 +206,13 @@ def calculate_score(board, AIpiece, PLAYERpiece):
     twoScore = checkTwo(board, AIpiece)*2
     AiWon = hasWon(board, AIpiece)
 
-    playerThreeScore = checkThree(board, PLAYERpiece)*8
-    playerTwoScore = checkTwo(board, PLAYERpiece)*4
+    playerThreeScore = checkThree(board, PLAYERpiece)*6
+    playerTwoScore = checkTwo(board, PLAYERpiece)*2
     playerWon = hasWon(board, PLAYERpiece)
 
     score = (threeScore + twoScore + 1000 if AiWon else 0) - (playerThreeScore + playerTwoScore + 1000 if playerWon else 0)
 
     return score
-
-def enemyCanWin(board, PLAYERpiece):
-    three_score = checkThree(board, PLAYERpiece)
-    if three_score > 0:
-        rowAmount = len(board)
-        colAmount = len(board[0])
-        emptyspaceChar = Ai.emptyspaceChar
-
-        for r in range(rowAmount-1):
-            for c in range(colAmount-1):
-                if c < colAmount-3:
-                    # check horizontal right
-                    if board[r][c] == board[r][c+1] == board[r][c+2] == PLAYERpiece and board[r][c+3] == emptyspaceChar:
-                        return c + 3
-                    
-                    if r < rowAmount-3:
-                        # check diagnoal right
-                        if board[r][c] == board[r+1][c+1] == board[r+2][c+2] == PLAYERpiece and board[r+3][c+3] == emptyspaceChar:
-                            return c + 3
-                
-                if c >= 3:
-                    # check horizontal left
-                    if board[r][c] == board[r][c-1] == board[r][c-2] == PLAYERpiece and board[r][c-3] == emptyspaceChar:
-                        return c - 3
-                    
-                    if r < rowAmount-3:
-                        # check diagnoal left
-                        if board[r][c] == board[r+1][c-1] == board[r+2][c-2] == PLAYERpiece and board[r+3][c-3] == emptyspaceChar:
-                            return c - 3
-                
-                if r < rowAmount-3:
-                    # chek vertical
-                    if (board[r][c] == board[r+1][c] == board[r+2][c] == PLAYERpiece and board[r+3][c] == emptyspaceChar) or (board[r+1][c] == board[r+2][c] == board[r+3][c] == PLAYERpiece and board[r][c] == emptyspaceChar):
-                        return c
-
-    else:
-        return None
 
 class Ai:
 
@@ -330,7 +293,6 @@ class Ai:
             for col in playableLocations:
                 temp_board = self.makeBoardCopy(board)
                 placePiece(temp_board, self.playerColor, col)
-                playerWon = hasWon(temp_board, self.playerColor)
 
                 newScore = self.minMax(temp_board, depth-1, alpha, beta, True)[1]
 
