@@ -210,7 +210,10 @@ def calculate_score(board, AIpiece, PLAYERpiece):
     playerTwoScore = checkTwo(board, PLAYERpiece)*2
     playerWon = hasWon(board, PLAYERpiece)
 
-    score = (threeScore + twoScore + 1000 if AiWon else 0) - (playerThreeScore + playerTwoScore + 1000 if playerWon else 0)
+    temp1 = threeScore + twoScore + (1000 if AiWon else 0)
+    temp2 = playerThreeScore + playerTwoScore + (1000 if playerWon else 0)
+
+    score = temp1 - temp2
 
     return score
 
